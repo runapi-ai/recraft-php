@@ -46,8 +46,8 @@ All SDK exceptions inherit from `RunApi\Core\Errors\RunApiException`, including 
 ## Links
 
 - Model page: https://runapi.ai/models/recraft
-- SDK docs: https://runapi.ai/docs#sdk-recraft
-- Product docs: https://runapi.ai/docs#recraft
+- SDK docs: https://runapi.ai/docs/resources/sdks
+- Product docs: https://runapi.ai/docs/api/recraft/remove-background
 - Pricing and rate limits: https://runapi.ai/models/recraft/crisp-upscale
 - Full catalog: https://runapi.ai/models
 - GitHub repository: https://github.com/runapi-ai/recraft-php
