@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Recraft\Models\CompletedImageTaskResponse;
 use RunApi\Recraft\Models\ImageTaskResponse;
-use RunApi\Recraft\Types;
 
 /**
  * Isolates the foreground subject and removes the background, producing a transparent PNG. Uses the recraft-remove-background model.
@@ -67,10 +66,8 @@ readonly class RemoveBackground extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/recraft/remove_background',
-            'recraft/remove-background',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,
-            Types::REMOVE_BACKGROUND_MODELS,
             'remove-background',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,

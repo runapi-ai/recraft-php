@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Recraft\Models\CompletedImageTaskResponse;
 use RunApi\Recraft\Models\ImageTaskResponse;
-use RunApi\Recraft\Types;
 
 /**
  * Increases image resolution while preserving detail and sharpness. Uses the recraft-crisp-upscale model.
@@ -67,10 +66,8 @@ readonly class UpscaleImage extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/recraft/upscale_image',
-            'recraft/upscale-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,
-            Types::UPSCALE_IMAGE_MODELS,
             'upscale-image',
             ImageTaskResponse::class,
             CompletedImageTaskResponse::class,

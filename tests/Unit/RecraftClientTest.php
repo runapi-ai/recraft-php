@@ -27,16 +27,14 @@ final class RecraftClientTest extends TestCase
     public function testCreatePostsCompactedBodyToCorrectPath(): void
     {
         $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_1"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1"}')]);
         $client = new RecraftClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $task = $client->upscaleImage->create([
             'model' => 'recraft-crisp-upscale',
             'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
             'callback_url' => '',
-            'seed' => null,
-        ]);
+            'seed' => null]);
 
         $body = json_decode((string) $transport->requests[0]->getBody(), true, flags: JSON_THROW_ON_ERROR);
 
@@ -51,14 +49,12 @@ final class RecraftClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed","images":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","images":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept","usage":{"cost":0.05}}')]);
         $client = new RecraftClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $result = $client->upscaleImage->run([
             'model' => 'recraft-crisp-upscale',
-            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
-        ]);
+            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg']);
 
         self::assertInstanceOf(CompletedImageTaskResponse::class, $result);
         self::assertSame('https://file.runapi.ai/result', $result->images[0]->url);
@@ -70,8 +66,7 @@ final class RecraftClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","usage":{"cost":0.05}}')]);
         $client = new RecraftClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $this->expectException(ValidationException::class);
@@ -79,22 +74,19 @@ final class RecraftClientTest extends TestCase
 
         $client->upscaleImage->run([
             'model' => 'recraft-crisp-upscale',
-            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
-        ]);
+            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg']);
     }
 
 
     public function testSecondaryResourceUsesItsOwnPath(): void
     {
         $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_2"}'),
-        ]);
+            new Response(200, [], '{"id":"task_2"}')]);
         $client = new RecraftClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $client->removeBackground->create([
             'model' => 'recraft-remove-background',
-            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
-        ]);
+            'source_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg']);
 
         self::assertSame('/api/v1/recraft/remove_background', $transport->requests[0]->getUri()->getPath());
     }
